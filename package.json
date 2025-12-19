@@ -1,0 +1,7 @@
+{
+  "name": "student-life-os",
+  "version": "1.0.0",
+  "dependencies": {
+    "mongoose": "^6.10.0"
+  }
+}
