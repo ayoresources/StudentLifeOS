@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Control Room</title>
+    <style>body{font-family:monospace; padding:20px;} table{width:100%; border-collapse:collapse;} th,td{border:1px solid #ccc; padding:10px;} .btn{background:green; color:white; cursor:pointer;}</style>
+</head>
+<body>
+    <h1>Admin Panel</h1>
+    <button onclick="logout()" style="background:red; color:white; border:none; padding:5px;">Log Out</button>
+    <hr>
+    <table>
+        <thead><tr><th>Name</th><th>Plan</th><th>Action</th></tr></thead>
+        <tbody id="list"></tbody>
+    </table>
+
+    <script>
+        if(!sessionStorage.getItem('adminToken')) window.location.href = 'admin-login.html';
+
+        async function load() {
+            const res = await fetch('/api/get_users');
+            const users = await res.json();
+            document.getElementById('list').innerHTML = users.map(u => `
+                <tr>
+                    <td>${u.name}<br>${u.phone}</td>
+                    <td>${u.plan}</td>
+                    <td>${u.plan === 'Free' ? `<button class="btn" onclick="approve('${u._id}')">Approve</button>` : 'Active'}</td>
+                </tr>
+            `).join('');
+        }
+
+        async function approve(id) {
+            if(confirm("Approve Payment?")) {
+                await fetch('/api/approve', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({userId: id}) });
+                load();
+            }
+        }
+
+        function logout() { sessionStorage.clear(); window.location.href = 'index.html'; }
+        load();
+    </script>
+</body>
+</html>
