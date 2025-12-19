@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; }
+        .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 10px; }
+        .locked { filter: blur(5px); pointer-events: none; }
+        .fab-container { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .fab { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; font-size: 24px; }
+    </style>
+</head>
+<body>
+    <h2 id="greeting">Welcome</h2>
+    <div id="status" style="background:#ddd; display:inline-block; padding:5px 10px; border-radius:5px;">FREE PLAN</div>
+    
+    <div class="card">
+        <h3 id="faith-header">Spiritual</h3>
+        <p id="faith-content">Loading...</p>
+    </div>
+
+    <div class="card" id="pro-card">
+        <h3><i class="fas fa-briefcase"></i> Hustle (PRO)</h3>
+        <div class="locked" id="pro-content">
+            <p>1. How to register with CAC.</p>
+            <p>2. Winning Student Politics.</p>
+        </div>
+        <button id="unlock-btn" onclick="openPayment()" style="width:100%; margin-top:10px; padding:10px;">Upgrade (₦2000)</button>
+    </div>
+
+    <div class="fab-container">
+        <a href="https://wa.me/2347050376975" class="fab" style="background:#25D366;"><i class="fab fa-whatsapp"></i></a>
+        <a href="mailto:abideenyakubopeyemi@gmail.com" class="fab" style="background:#EA4335;"><i class="fas fa-envelope"></i></a>
+    </div>
+
+    <script>
+        const user = JSON.parse(localStorage.getItem('userProfile'));
+        if(!user) window.location.href = 'index.html';
+
+        document.getElementById('greeting').innerText = `Welcome, ${user.name}`;
+        
+        // Religion Logic
+        if(user.religion === 'Islam') {
+            document.getElementById('faith-header').innerText = "Daily Qur'an";
+            document.getElementById('faith-content').innerText = "Indeed, with hardship [will be] ease. (94:6)";
+        } else {
+            document.getElementById('faith-header').innerText = "Daily Devotion";
+            document.getElementById('faith-content').innerText = "I can do all things through Christ. (Phil 4:13)";
+        }
+
+        // Pro Logic
+        if(user.plan === 'Pro') {
+            document.getElementById('status').innerText = "PRO MEMBER";
+            document.getElementById('status').style.background = "#d1fae5";
+            document.getElementById('pro-content').classList.remove('locked');
+            document.getElementById('unlock-btn').style.display = 'none';
+        }
+
+        function openPayment() { alert("Transfer ₦2000 to Opay: 6111025478 (YAKUB OPEYEMI). Contact Admin on WhatsApp after payment."); }
+    </script>
+</body>
+</html>
